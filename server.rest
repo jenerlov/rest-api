@@ -1,11 +1,20 @@
-
-GET http://localhost:3000/
+GET http://localhost:3000/api/guitars
 
 ###
 
-POST http://localhost:3000/localhost:3000/api/1
+DELETE http://localhost:3000/api/guitars
+
+###
+
+POST http://localhost:3000/api/guitars
 Content-Type: application/json
 
 {
-    "hej"
+    "id": 5,
+    "name": "gitarr",
+    "price": 10000
 }
+
+###
+
+PUT http://localhost:3000/api/guitars

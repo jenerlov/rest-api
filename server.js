@@ -1,25 +1,70 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 
-app.use(express.json());
+const guitars = [
+    {
+       id: 1,
+       pris: 16899,
+       tillverkare: "Gibson",
+       modell: "S-G"
 
-// Endpoints
+    },
+    {
+       id: 2,
+       tillverkare: "Gibson",
+       modell: "Les Paul",
+       pris: 14500,
 
-app.get('api/', (req, res) => {
+    },
+    {
+       id: 3,
+       pris: 3000,
+       tillverkare: "Fender",
+       modell: "CD-60"
 
+    },
+    {
+       id: 4,
+       pris: 4000,
+       tillverkare: "Ibanez",
+       modell: "AD519-NT"
+
+    }, 
+];
+
+app.use(express.json())
+
+app.get("/api/guitars", (req, res) => {
+    res.json(guitars)
+    res.status(200).json(req.body)
 })
 
-app.post('api/', (req, res) => {
-    console.log('hej');
+app.post("/api/guitars", (req, res) => {
+    guitars.push(req.body);
+    res.status(201).json(req.body);
 })
 
-app.delete('api/', (req, res) => {
+// app.put("/api/guitars", (req, res) => {
+//     const guitars = req.guitars;
 
+//     guitars = _.extend(guitars, req.body);
+
+//     guitars.save(function(err){
+//         if(err) {
+//             return res.send("/guitars", {
+//                 errors: err.errors,
+//                 guitars: guitars
+//             });
+//         } else {
+//             res.json(guitars);
+//         }
+//     })
+// })
+
+app.delete("/api/guitars", (req, res) => {
+    const index = guitars.findIndex(g => g.name === "En gitarr");
+    const deletedGuitars = guitars.splice(index, 1);
+    res.json(deletedGuitars)
 })
 
-// Start server
-
-app.listen(port, () => {
-    console.log(`Server is runnin on http://localhost${port}`)
-});
+app.listen(3000);
