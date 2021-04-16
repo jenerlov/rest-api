@@ -4,30 +4,30 @@ const app = express();
 const guitars = [
     {
        id: 1,
-       pris: 16899,
-       tillverkare: "Gibson",
-       modell: "S-G"
+       price: 16899,
+       label: "Gibson",
+       model: "S-G"
 
     },
     {
        id: 2,
-       tillverkare: "Gibson",
-       modell: "Les Paul",
        pris: 14500,
+       label: "Gibson",
+       model: "Les Paul",
 
     },
     {
        id: 3,
-       pris: 3000,
-       tillverkare: "Fender",
-       modell: "CD-60"
+       pris: 30000,
+       label: "Fender",
+       model: "Telecaster"
 
     },
     {
        id: 4,
        pris: 4000,
-       tillverkare: "Ibanez",
-       modell: "AD519-NT"
+       label: "Fender",
+       model: "Stratocaster"
 
     }, 
 ];
@@ -35,31 +35,70 @@ const guitars = [
 app.use(express.json())
 
 app.get("/api/guitars", (req, res) => {
-    res.json(guitars)
-    res.status(200).json(req.body)
+    res.json(guitars);
 })
+
+app.get("/api/guitars/:id", (req, res) => {
+    const id = req.params.id
+
+    let foundGuitar = guitars.find((guitar) => {
+        return guitar.id == id;     
+    })
+    if(!foundGuitar) {
+        res.status(404).json({"Error": "gitarren finns inte"})
+    }
+    res.json(foundGuitar)
+    
+})
+
 
 app.post("/api/guitars", (req, res) => {
-    guitars.push(req.body);
-    res.status(201).json(req.body);
+   
+    const labelOfGuitar = req.body.label
+    const priceOfGuitar = req.body.price
+    const modelOfGuitar = req.body.model
+
+    let newId = 0;
+    for(const guitar of guitars) {
+        if(guitar.id > newId) {
+            newId = guitar.id
+        }
+    }
+
+    newId++
+
+    const newGuitar = {
+        id: newId,
+        price: priceOfGuitar,
+        label: labelOfGuitar,
+        model: modelOfGuitar,
+
+    }
+
+    guitars.push(newGuitar)
+    res.status(201).json(newGuitar);
 })
 
-// app.put("/api/guitars", (req, res) => {
-//     const guitars = req.guitars;
+app.put("/api/guitars", (req, res) => {
+    const id = req.params.id;
 
-//     guitars = _.extend(guitars, req.body);
+    const foundGuitar = guitars.find((guitar) => {
+        return guitar.id == id
+    })
 
-//     guitars.save(function(err){
-//         if(err) {
-//             return res.send("/guitars", {
-//                 errors: err.errors,
-//                 guitars: guitars
-//             });
-//         } else {
-//             res.json(guitars);
-//         }
-//     })
-// })
+    if(foundGuitar) {
+        foundGuitar.price = req.body.price
+        foundGuitar.label = req.body.label
+        foundGuitar.model = req.body.model
+        res.json(foundGuitar)
+        return
+    }
+    if(!foundGuitar) {
+        res.status(404)
+        return
+    }
+    
+})
 
 app.delete("/api/guitars", (req, res) => {
     const index = guitars.findIndex(g => g.name === "En gitarr");

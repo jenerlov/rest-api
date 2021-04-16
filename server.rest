@@ -2,19 +2,32 @@ GET http://localhost:3000/api/guitars
 
 ###
 
-DELETE http://localhost:3000/api/guitars
+GET http://localhost:3000/api/guitars/2
 
 ###
-
 POST http://localhost:3000/api/guitars
 Content-Type: application/json
 
 {
     "id": 5,
-    "name": "gitarr",
-    "price": 10000
+    "price": 10000,
+    "label": "Tanglewood",
+    "model": "TWCR DE"
+    
 }
 
 ###
 
+DELETE http://localhost:3000/api/guitars/
+###
+
+
 PUT http://localhost:3000/api/guitars
+Content-Type: application/json
+
+{
+    "id": 2,
+    "price": 3000,
+    "maker": "Gibson",
+    "model": "Nighthawk"
+}
